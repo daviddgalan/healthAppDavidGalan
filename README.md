@@ -1,14 +1,14 @@
 # HealthApp - Sistema de Gestión de Citas Médicas 🏥
 
 ## 📖 Descripción del proyecto
-HealthApp es una aplicación web desarrollada con el patrón MVC con Spring Boot, diseñada para gestionar citas médicas en un centro de salud. La aplicación permite a los clientes registrarse como pacientes, editar sus datos personales y pedir citas médicas de forma autónoma. Tambien cuenta con un panel Médico para gestionar las peticiones de pacientes
+HealthApp es una aplicación web desarrollada con el patrón MVC con Spring Boot, diseñada para gestionar citas médicas en un centro de salud. La aplicación permite a los clientes registrrarse como pacientes, editar sus datos personales y pedir citas médicas de forma autónoma. Tambien cuenta con un panel Médico para gestionar las peticiones de pacinentes
 
 La aplicación diferencia el acceso y las funcionalidades según el rol del usuario:
 * **Pacientes (`ROLE_PACIENTE`):** Pueden editar su perfil, pedir nuevas citas médicas, ver su historial, y editar o cancelar citas programadas.
 * **Médicos (`ROLE_MEDICO`):** Tienen un panel donde pueden ver las peticiones de citas disponibles, añadirlas a su agenda y actualizar el estado delas citas (Realizada, Cancelada, Programada). Este Rol solo se puede tener cambiandolo desde la bbdd.
 
 ### Tecnologías utilizadas
-* **Backend:** Java 17, Spring Boot 3, Spring Web, Spring Data JPA.
+* **Backend:** Java 21, Spring Boot 3, Spring Web, Spring Data JPA.
 * **Seguridad:** Spring Security 6, JWT.
 * **Base de Datos:** MySQL.
 * **Frontend:** HTML5, CSS3, Thymeleaf.
@@ -48,3 +48,22 @@ Desde la raiz del proyecto ejecutar en Bash
 mvn spring-boot:run
 ```
 Descargará las librerías y ejecuta el servidor
+
+### 4. Entrar a la web
+Desde `http://localhost:8080/registro` puedes registrarte como paciente.
+
+## 🔒 Explicación básica de la seguridad
+
+Está hecha con Spring Security y JWT.
+
+### 1. Autenticación login
+Cuando se ponen los datos en el login, AuthService lo contrasta con la bbdd, la contraseña con BCrypt. Si es correcto, se pasa al JwtUtil que crea un token firmado que contiene el email y el Rol del cliente.
+
+### 2. Almacenamiento Seguro
+Para poder crear el proyecto con el patrón MVC con Thymeleaf, el JWT se pasa por una cookie HTTP-Only. Protege a la cookie de ataques XSS.
+
+### 3. Autorización (Filtro JWT)
+En las peticiones HTTP a rutas protegidas, JwtAuthenticationFilter valida que el token sea correcto y que no haya expirado su tiempo.
+
+### 4. Endpoints
+eL uso de los controladores se controla con @PreAuthorize, para que ninguún paciente pueda acceder a rutas de medico y tambien al revés.
