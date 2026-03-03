@@ -5,7 +5,7 @@ HealthApp es una aplicación web desarrollada con el patrón MVC con Spring Boot
 
 La aplicación diferencia el acceso y las funcionalidades según el rol del usuario:
 * **Pacientes (`ROLE_PACIENTE`):** Pueden editar su perfil, pedir nuevas citas médicas, ver su historial, y editar o cancelar citas programadas.
-* **Médicos (`ROLE_MEDICO`):** Tienen un panel donde pueden ver las peticiones de citas disponibles, añadirlas a su agenda y actualizar el estado delas citas (Realizada, Cancelada, Programada).
+* **Médicos (`ROLE_MEDICO`):** Tienen un panel donde pueden ver las peticiones de citas disponibles, añadirlas a su agenda y actualizar el estado delas citas (Realizada, Cancelada, Programada). Este Rol solo se puede tener cambiandolo desde la bbdd.
 
 ### Tecnologías utilizadas
 * **Backend:** Java 17, Spring Boot 3, Spring Web, Spring Data JPA.
@@ -28,10 +28,23 @@ Para ejecutar este proyecto en local, sigue estos pasos:
 ### 2. Configuración de la Base de Datos
 1. Abre tu gestor de base de datos (phpMyAdmin o MySQL Workbench).
 2. Crea una base de datos vacía llamada `healthapp`:
+```sql
    CREATE DATABASE healthapp;
-3. En `src/main/resources/application.properties` tener esto:
+```
+4. En `src/main/resources/application.properties` tener esto:
+```
 spring.datasource.url=jdbc:mysql://localhost:3306/healthapp
 spring.datasource.username=tu_usuario_mysql
 spring.datasource.password=tu_contraseña_mysql
 spring.jpa.hibernate.ddl-auto=update
 server.port=8080
+```
+
+### 3. Ejecución del proyecto
+Ejecutar desde el IDE que uses archivo `DavidgalanApplication.java`
+O
+Desde la raiz del proyecto ejecutar en Bash
+```
+mvn spring-boot:run
+```
+Descargará las librerías y ejecuta el servidor
