@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Mi Perfil - HealthApp</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; }
+        .container { max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ccc; border-radius: 10px; }
+        .nav { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;}
+        .nav a { text-decoration: none; color: #007BFF; font-weight: bold; margin-right: 15px;}
+        .nav form { display: inline; }
+        .btn-logout { background: none; border: none; color: red; font-weight: bold; cursor: pointer; text-decoration: underline; }
+        .btn { display: inline-block; padding: 10px 15px; background-color: #ffc107; color: #333; text-decoration: none; border-radius: 5px; margin-top: 15px; font-weight: bold;}
+        .alert-success { background-color: #d4edda; color: #155724; padding: 10px; margin-bottom: 15px; border-radius: 5px; }
+        .perfil-dato { margin-bottom: 10px; font-size: 16px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="nav">
+        <div>
+            <a th:href="@{/paciente/citas}">Mis Citas</a>
+            <a th:href="@{/paciente/perfil}">Mi Perfil</a>
+        </div>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn-logout">Cerrar Sesión</button>
+        </form>
+    </div>
+
+    <h2>Datos Personales</h2>
+
+    <div th:if="${param.actualizado}" class="alert-success">
+        Tus datos se han actualizado correctamente.
+    </div>
+
+    <div class="perfil-dato"><strong>Nombre:</strong> <span th:text="${paciente.nombre}"></span></div>
+    <div class="perfil-dato"><strong>Apellidos:</strong> <span th:text="${paciente.apellidos}"></span></div>
+    <div class="perfil-dato"><strong>Email:</strong> <span th:text="${paciente.email}"></span></div>
+    <div class="perfil-dato"><strong>Fecha de Nacimiento:</strong> <span th:text="${paciente.fechaNacimiento}"></span></div>
+    <div class="perfil-dato"><strong>Teléfono:</strong> <span th:text="${paciente.telefono}"></span></div>
+
+    <a th:href="@{/paciente/editar}" class="btn">Editar Perfil</a>
+</div>
+
+</body>
+</html>

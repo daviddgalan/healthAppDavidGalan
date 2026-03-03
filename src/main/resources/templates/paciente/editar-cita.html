@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Cita</title>
+</head>
+<body style="font-family: Arial; padding: 40px;">
+<h2>Modificar Cita Médica</h2>
+<form th:action="@{/paciente/citas/editar/{id}(id=${citaDTO.id})}" th:object="${citaDTO}" method="post">
+    <div>
+        <label>Fecha:</label><br>
+        <input type="date" th:field="*{fecha}" required>
+    </div><br>
+    <div>
+        <label>Hora:</label><br>
+        <input type="time" th:field="*{hora}" required>
+    </div><br>
+    <div>
+        <label>Especialidad:</label><br>
+        <input type="text" th:field="*{especialidad}" required>
+    </div><br>
+    <div>
+        <label>Descripción:</label><br>
+        <textarea th:field="*{descripcion}" rows="4" required></textarea>
+    </div><br>
+    <button type="submit">Actualizar Cita</button>
+    <a th:href="@{/paciente/citas}">Cancelar</a>
+</form>
+</body>
+</html>

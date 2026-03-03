@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Panel Médico - HealthApp</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 40px; background-color: #f4f7f6;}
+        .container { max-width: 1000px; margin: auto; padding: 20px; background: white; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);}
+        .nav { margin-bottom: 20px; padding-bottom: 10px; border-bottom: 1px solid #eee; display: flex; justify-content: space-between;}
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; margin-bottom: 30px;}
+        th, td { border: 1px solid #ddd; padding: 10px; text-align: center; }
+        th { background-color: #007BFF; color: white; }
+        .th-green { background-color: #28a745; }
+        .btn { padding: 5px 10px; text-decoration: none; border-radius: 3px; color: white; border: none; cursor: pointer; font-size: 14px;}
+        .btn-success { background-color: #28a745; }
+        .btn-primary { background-color: #007BFF; }
+        .btn-danger { background-color: #dc3545; }
+        .btn-logout { background: none; border: none; color: red; font-weight: bold; cursor: pointer; text-decoration: underline; font-size: 16px;}
+        h3 { border-left: 5px solid #007BFF; padding-left: 10px; color: #333;}
+        .alert { padding: 10px; margin-bottom: 15px; border-radius: 5px; background-color: #d4edda; color: #155724;}
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="nav">
+        <h2>Panel de Médico: Gestión de Citas</h2>
+        <form th:action="@{/logout}" method="post">
+            <button type="submit" class="btn-logout">Cerrar Sesión</button>
+        </form>
+    </div>
+
+    <div th:if="${param.aceptada}" class="alert">Has aceptado la cita correctamente. Ya está en tu agenda.</div>
+    <div th:if="${param.actualizada}" class="alert">El estado de la cita ha sido actualizado.</div>
+
+    <h3>Peticiones de Pacientes (Sin asignar)</h3>
+    <table>
+        <thead>
+        <tr>
+            <th class="th-green">Fecha</th>
+            <th class="th-green">Hora</th>
+            <th class="th-green">Paciente</th>
+            <th class="th-green">Especialidad solicitada</th>
+            <th class="th-green">Motivo</th>
+            <th class="th-green">Acción</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cita : ${citasDisponibles}">
+            <td th:text="${cita.fecha}"></td>
+            <td th:text="${cita.hora}"></td>
+            <td th:text="${cita.nombrePaciente}"></td>
+            <td th:text="${cita.especialidad}"></td>
+            <td th:text="${cita.descripcion}"></td>
+            <td>
+                <form th:action="@{/medico/citas/aceptar/{id}(id=${cita.id})}" method="post">
+                    <button type="submit" class="btn btn-success">Aceptar Cita</button>
+                </form>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(citasDisponibles)}">
+            <td colspan="6">No hay nuevas peticiones de citas en este momento.</td>
+        </tr>
+        </tbody>
+    </table>
+
+    <h3>Tu Agenda (Citas Asignadas)</h3>
+    <table>
+        <thead>
+        <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Paciente</th>
+            <th>Motivo</th>
+            <th>Estado Actual</th>
+            <th>Actualizar Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="cita : ${citasAsignadas}">
+            <td th:text="${cita.fecha}"></td>
+            <td th:text="${cita.hora}"></td>
+            <td th:text="${cita.nombrePaciente}"></td>
+            <td th:text="${cita.descripcion}"></td>
+            <td th:text="${cita.estado}"></td>
+            <td>
+                <div th:if="${cita.estado == 'PROGRAMADA'}" style="display: flex; justify-content: center; gap: 5px;">
+                    <form th:action="@{/medico/citas/estado/{id}(id=${cita.id})}" method="post">
+                        <input type="hidden" name="estado" value="REALIZADA">
+                        <button type="submit" class="btn btn-primary" onclick="return confirm('¿Marcar consulta como realizada?');">Atendida</button>
+                    </form>
+                    <form th:action="@{/medico/citas/estado/{id}(id=${cita.id})}" method="post">
+                        <input type="hidden" name="estado" value="CANCELADA">
+                        <button type="submit" class="btn btn-danger" onclick="return confirm('¿Seguro que deseas cancelar esta cita?');">Cancelar</button>
+                    </form>
+                </div>
+                <span th:if="${cita.estado != 'PROGRAMADA'}" style="color: gray; font-style: italic;">Finalizada</span>
+            </td>
+        </tr>
+        <tr th:if="${#lists.isEmpty(citasAsignadas)}">
+            <td colspan="6">No tienes citas asignadas en tu agenda.</td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

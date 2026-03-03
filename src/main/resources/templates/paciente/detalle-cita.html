@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Detalle de Cita</title>
+</head>
+<body style="font-family: Arial; padding: 40px;">
+<h2>Detalle de la Cita Médica</h2>
+<ul>
+    <li><strong>Fecha:</strong> <span th:text="${cita.fecha}"></span></li>
+    <li><strong>Hora:</strong> <span th:text="${cita.hora}"></span></li>
+    <li><strong>Especialidad:</strong> <span th:text="${cita.especialidad}"></span></li>
+    <li><strong>Estado:</strong> <span th:text="${cita.estado}"></span></li>
+    <li><strong>Motivo:</strong> <span th:text="${cita.descripcion}"></span></li>
+    <li><strong>Médico asignado:</strong> <span th:text="${cita.nombreMedico}"></span></li>
+</ul>
+
+<a th:if="${cita.estado == 'PROGRAMADA'}" th:href="@{/paciente/citas/editar/{id}(id=${cita.id})}">Editar Cita</a>
+<br><br>
+<a th:href="@{/paciente/citas}">Volver al listado</a>
+</body>
+</html>
